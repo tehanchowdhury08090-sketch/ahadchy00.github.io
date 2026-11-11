@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AHAD CHOWDHURY — Software Developer & Digital Creator</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#040608',
+            cardBg: 'rgba(12, 19, 16, 0.65)',
+            brandGreen: '#10b981',
+            emeraldNeon: '#00ff9d',
+            cyanNeon: '#06b6d4',
+            glowGreen: 'rgba(16, 185, 129, 0.25)'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #040608;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+
+    .glass-card {
+      background: rgba(10, 16, 13, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(16, 185, 129, 0.45);
+      box-shadow: 0 30px 60px rgba(16, 185, 129, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+    }
+
+    .neon-border {
+      position: relative;
+    }
+
+    .neon-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(45deg, #10b981, #06b6d4, #00ff9d);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+    }
+
+    .neon-border:hover::before {
+      opacity: 1;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #040608;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.3);
+      border-radius: 4px;
+    }
+
+    #webgl-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="selection:bg-brandGreen selection:text-black">
+
+  <canvas id="webgl-bg"></canvas>
+
+  <!-- Navigation -->
+  <header class="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-50 transition-all duration-500">
+    <div class="glass-card rounded-full px-6 py-3.5 flex items-center justify-between border border-white/10">
+      <a href="#home" onclick="trigger3DTransition(0)" class="flex items-center space-x-3 group">
+        <div
+          class="w-10 h-10 rounded-full bg-brandGreen/10 border border-brandGreen/40 flex items-center justify-center text-brandGreen font-mono font-bold text-sm group-hover:bg-brandGreen group-hover:text-black transition-all duration-300 shadow-lg shadow-brandGreen/20">
+          AC
+        </div>
+        <div>
+          <span class="font-extrabold text-base tracking-wider text-white block leading-none">AHAD CHOWDHURY</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-gray-300">
+        <a href="#home" onclick="trigger3DTransition(0)" class="hover:text-brandGreen transition duration-200">Home</a>
+        <a href="#about" onclick="trigger3DTransition(1)" class="hover:text-brandGreen transition duration-200">About
+          Me</a>
+        <a href="#skills" onclick="trigger3DTransition(2)"
+          class="hover:text-brandGreen transition duration-200">Skills</a>
+        <a href="#projects" onclick="trigger3DTransition(3)"
+          class="hover:text-brandGreen transition duration-200">Projects</a>
+        <a href="#services" onclick="trigger3DTransition(4)"
+          class="hover:text-brandGreen transition duration-200">Services</a>
+        <a href="#contact" onclick="trigger3DTransition(5)"
+          class="hover:text-brandGreen transition duration-200">Contact</a>
+      </nav>
+
+      <a href="#contact" onclick="trigger3DTransition(5)"
+        class="neon-border bg-black/60 hover:bg-brandGreen text-white hover:text-black font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-300 flex items-center space-x-2">
+        <span>CONTACT</span>
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+      </a>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+
+    <!-- Home / Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center px-6 pt-32 pb-20 relative">
+      <div class="max-w-4xl mx-auto w-full text-center space-y-8">
+
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] text-white">
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-white via-brandGreen to-cyanNeon text-glow font-extrabold">
+            I Turn Ideas Into Experiences That Matter.
+          </span>
+        </h1>
+
+        <!-- Subtitle / Role -->
+        <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brandGreen tracking-wide font-mono">
+          Software Developer & Digital Creator
+        </div>
+
+        <!-- Next Line Paragraph -->
+        <p class="text-gray-200 text-lg md:text-xl font-normal max-w-3xl mx-auto leading-relaxed pt-2">
+          I build thoughtful digital solutions by combining technology, logic, and creativity. From interactive websites
+          to software-driven experiences, I enjoy transforming complex ideas into simple, meaningful products.
+        </p>
+
+        <div class="pt-6 flex flex-wrap items-center justify-center gap-5">
+          <a href="#projects" onclick="trigger3DTransition(3)"
+            class="neon-border bg-brandGreen text-black font-extrabold px-9 py-4 rounded-full flex items-center space-x-3 transition-all duration-300 hover:scale-105 shadow-xl shadow-brandGreen/20">
+            <span>Explore Portfolio</span>
+            <i data-lucide="arrow-down-right" class="w-5 h-5"></i>
+          </a>
+          <a href="#contact" onclick="trigger3DTransition(5)"
+            class="glass-card hover:bg-white/10 px-9 py-4 rounded-full font-semibold text-white transition-all duration-300 border border-white/20">
+            Get In Touch
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-28 px-6">
+      <div class="max-w-6xl mx-auto space-y-16">
+        <div class="max-w-2xl">
+          <span class="text-xs font-mono uppercase tracking-widest text-brandGreen block mb-2">BACKGROUND &
+            MASTERY</span>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">ABOUT ME</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-7 glass-card rounded-3xl p-8 md:p-10 space-y-6">
+            <p class="text-gray-200 leading-relaxed text-base md:text-lg">
+              I'm a passionate Software & Web Developer driven by curiosity, creativity, and a deep interest in
+              technology. I believe that every great digital product begins with an idea, but what truly makes it
+              valuable is the ability to transform that idea into something meaningful, functional, and impactful.
+            </p>
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+              My interest in development goes beyond simply writing code. I'm fascinated by how technology works behind
+              the scenes, how different systems connect, and how thoughtful solutions can simplify everyday challenges.
+              I enjoy exploring modern technologies, understanding new concepts, and discovering innovative ways to
+              bring ideas to life.
+            </p>
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+              For me, development is a continuous journey of learning, experimenting, and improving. Every challenge is
+              an opportunity to think differently, solve problems, and expand my technical abilities. Whether it's
+              building a responsive website, exploring software architecture, or experimenting with new tools and
+              technologies, I approach every project with curiosity and a commitment to growth.
+            </p>
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+              I believe that great development is a balance of logic, creativity, performance, and user experience.
+              Writing clean code is important, but creating something that is useful, reliable, and enjoyable to use is
+              what truly matters.
+            </p>
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+              I'm constantly working to expand my knowledge, strengthen my development skills, and turn what I learn
+              into real-world projects. My long-term vision is to become a skilled software developer, build innovative
+              digital products, and contribute to technology that makes a meaningful difference.
+            </p>
+            <p class="text-brandGreen font-semibold leading-relaxed text-sm md:text-base font-mono">
+              For me, coding isn't just about building software — it's about turning possibilities into reality.
+            </p>
+          </div>
+
+          <div class="lg:col-span-5 glass-card rounded-3xl p-8 space-y-6">
+            <h3 class="text-xl font-bold text-white font-mono flex items-center space-x-2">
+              <i data-lucide="terminal" class="w-5 h-5 text-brandGreen"></i>
+              <span>Developer Vision</span>
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Focused on continuous learning, problem-solving, and writing clean, scalable code for web and software
+              ecosystems.
+            </p>
+            <div class="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2">
+              <span class="text-brandGreen block font-mono font-bold text-xs">CORE ETHOS</span>
+              <p class="text-gray-400 text-xs">Logic + Creativity = Meaningful Digital Products.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section (Redesigned professionally) -->
+    <section id="skills" class="py-28 px-6 bg-black/40">
+      <div class="max-w-6xl mx-auto space-y-16">
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+          <span class="text-xs font-mono uppercase tracking-widest text-brandGreen block">My Skills</span>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Technology, Creativity & Continuous
+            Growth</h2>
+          <p class="text-gray-400 text-sm md:text-base">
+            A collection of technologies and abilities I'm learning and developing to create meaningful digital
+            experiences.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Card 1: Programming Languages -->
+          <div class="glass-card rounded-3xl p-6 space-y-4 hover:border-brandGreen/50 transition">
+            <div
+              class="w-12 h-12 rounded-2xl bg-brandGreen/10 border border-brandGreen/30 flex items-center justify-center text-brandGreen">
+              <i data-lucide="code-2" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white font-mono">Programming Languages</h3>
+            <ul class="space-y-2 text-xs font-mono text-gray-300">
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>Kotlin</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>JavaScript</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Web Development -->
+          <div class="glass-card rounded-3xl p-6 space-y-4 hover:border-cyanNeon/50 transition">
+            <div
+              class="w-12 h-12 rounded-2xl bg-cyanNeon/10 border border-cyanNeon/30 flex items-center justify-center text-cyanNeon">
+              <i data-lucide="layout" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white font-mono">Web Development</h3>
+            <ul class="space-y-2 text-xs font-mono text-gray-300">
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-cyanNeon"></span><span>HTML5</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-cyanNeon"></span><span>CSS3</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-cyanNeon"></span><span>Responsive Design</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-cyanNeon"></span><span>Frontend Development</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Development Tools -->
+          <div class="glass-card rounded-3xl p-6 space-y-4 hover:border-brandGreen/50 transition">
+            <div
+              class="w-12 h-12 rounded-2xl bg-brandGreen/10 border border-brandGreen/30 flex items-center justify-center text-brandGreen">
+              <i data-lucide="cpu" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white font-mono">Development Tools</h3>
+            <ul class="space-y-2 text-xs font-mono text-gray-300">
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>VS Code</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>IntelliJ IDEA</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>Git</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1.5 h-1.5 rounded-full bg-brandGreen"></span><span>GitHub</span></li>
+            </ul>
+          </div>
+
+          <!-- Card 4: Core & Professional Skills -->
+          <div class="glass-card rounded-3xl p-6 space-y-4 hover:border-cyanNeon/50 transition">
+            <div
+              class="w-12 h-12 rounded-2xl bg-cyanNeon/10 border border-cyanNeon/30 flex items-center justify-center text-cyanNeon">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white font-mono">Core & Soft Skills</h3>
+            <ul class="space-y-1.5 text-xs font-mono text-gray-300">
+              <li class="flex items-center space-x-2"><span
+                  class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>Problem Solving</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>Debugging</span></li>
+              <li class="flex items-center space-x-2"><span class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>OOP
+                  Fundamentals</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>Logical Thinking</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>Creative Thinking</span></li>
+              <li class="flex items-center space-x-2"><span
+                  class="w-1 h-1 rounded-full bg-cyanNeon"></span><span>Continuous Learning</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-28 px-6 relative">
+      <div class="max-w-6xl mx-auto space-y-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-brandGreen block mb-2">CURATED WORK</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Featured Projects</h2>
+          </div>
+
+          <div class="flex flex-wrap gap-2 font-mono text-xs">
+            <button onclick="filterProjects('all')"
+              class="filter-btn active bg-brandGreen text-black px-4 py-2 rounded-full font-bold transition">ALL</button>
+            <button onclick="filterProjects('sec')"
+              class="filter-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-full border border-white/10 transition">WEB</button>
+            <button onclick="filterProjects('fullstack')"
+              class="filter-btn bg-white/5 hover:bg-white/10 text-gray-300 px-4 py-2 rounded-full border border-white/10 transition">SOFTWARE</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="project-card sec glass-card rounded-3xl overflow-hidden group">
+            <div
+              class="h-48 bg-gradient-to-br from-emerald-900/40 via-black to-black p-6 flex flex-col justify-between relative overflow-hidden border-b border-white/10">
+              <div class="flex justify-between items-center z-10">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-brandGreen/20 text-brandGreen text-[10px] font-mono uppercase border border-brandGreen/40">INTERACTIVE</span>
+                <i data-lucide="globe" class="w-6 h-6 text-brandGreen"></i>
+              </div>
+              <div class="z-10">
+                <h3 class="text-xl font-bold text-white group-hover:text-brandGreen transition">Dynamic Web Platform
+                </h3>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <p class="text-gray-400 text-xs leading-relaxed">
+                Modern responsive web app focused on performance, clean UI, and interactive user experiences.
+              </p>
+              <div class="flex flex-wrap gap-2 font-mono text-[10px]">
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">HTML5</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">CSS3</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card fullstack glass-card rounded-3xl overflow-hidden group">
+            <div
+              class="h-48 bg-gradient-to-br from-cyan-900/40 via-black to-black p-6 flex flex-col justify-between relative overflow-hidden border-b border-white/10">
+              <div class="flex justify-between items-center z-10">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-cyanNeon/20 text-cyanNeon text-[10px] font-mono uppercase border border-cyanNeon/40">APPLICATION</span>
+                <i data-lucide="terminal" class="w-6 h-6 text-cyanNeon"></i>
+              </div>
+              <div class="z-10">
+                <h3 class="text-xl font-bold text-white group-hover:text-cyanNeon transition">Software Utility Tool</h3>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <p class="text-gray-400 text-xs leading-relaxed">
+                Robust software tool built with object-oriented logic and clean modular structure for day-to-day tasks.
+              </p>
+              <div class="flex flex-wrap gap-2 font-mono text-[10px]">
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">Kotlin</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">OOP</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">Logic</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card sec glass-card rounded-3xl overflow-hidden group">
+            <div
+              class="h-48 bg-gradient-to-br from-emerald-900/30 via-black to-black p-6 flex flex-col justify-between relative overflow-hidden border-b border-white/10">
+              <div class="flex justify-between items-center z-10">
+                <span
+                  class="px-2.5 py-1 rounded-md bg-brandGreen/20 text-brandGreen text-[10px] font-mono uppercase border border-brandGreen/40">CREATIVE</span>
+                <i data-lucide="layout" class="w-6 h-6 text-brandGreen"></i>
+              </div>
+              <div class="z-10">
+                <h3 class="text-xl font-bold text-white group-hover:text-brandGreen transition">Digital Portfolio</h3>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <p class="text-gray-400 text-xs leading-relaxed">
+                Immersive web interface showcasing development work with animations and responsive layouts.
+              </p>
+              <div class="flex flex-wrap gap-2 font-mono text-[10px]">
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">Tailwind</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">Three.js</span>
+                <span class="px-2 py-1 rounded bg-white/5 text-gray-300">GSAP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-28 px-6 bg-black/40">
+      <div class="max-w-6xl mx-auto space-y-16">
+        <div class="text-center max-w-2xl mx-auto">
+          <span class="text-xs font-mono uppercase tracking-widest text-brandGreen block mb-2">WHAT I DO</span>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Specialized Services</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="glass-card rounded-3xl p-8 space-y-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-brandGreen/10 border border-brandGreen/30 flex items-center justify-center text-brandGreen mb-6">
+              <i data-lucide="layout" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Web Development</h3>
+            <p class="text-gray-400 text-xs leading-relaxed">
+              Creating responsive, clean, and interactive websites using HTML5, CSS3, and modern frontend techniques.
+            </p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-8 space-y-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-cyanNeon/10 border border-cyanNeon/30 flex items-center justify-center text-cyanNeon mb-6">
+              <i data-lucide="code-2" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Software Solutions</h3>
+            <p class="text-gray-400 text-xs leading-relaxed">
+              Building logical software products with Kotlin and solid object-oriented programming fundamentals.
+            </p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-8 space-y-4">
+            <div
+              class="w-12 h-12 rounded-2xl bg-emeraldNeon/10 border border-emeraldNeon/30 flex items-center justify-center text-emeraldNeon mb-6">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Digital Creation</h3>
+            <p class="text-gray-400 text-xs leading-relaxed">
+              Transforming creative ideas into tangible, impactful digital experiences with seamless user interactions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-28 px-6 relative">
+      <div class="max-w-3xl mx-auto text-center space-y-8">
+        <span class="text-xs font-mono uppercase tracking-widest text-brandGreen block">ENGAGEMENT</span>
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight">Let's Build Something Together</h2>
+        <p class="text-gray-400 text-sm md:text-base max-w-lg mx-auto">
+          Have an idea or project in mind? Reach out and let's turn your vision into reality.
+        </p>
+
+        <div class="glass-card rounded-3xl p-8 max-w-xl mx-auto space-y-6 text-left">
+          <form onsubmit="event.preventDefault(); alert('Message dispatched successfully!');"
+            class="space-y-4 font-mono text-xs">
+            <div>
+              <label class="block text-gray-400 mb-2">YOUR NAME</label>
+              <input type="text" required placeholder="John Doe"
+                class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brandGreen">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">YOUR EMAIL</label>
+              <input type="email" required placeholder="ahad@example.com"
+                class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brandGreen">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">YOUR MESSAGE</label>
+              <textarea rows="4" required placeholder="Write your message here..."
+                class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brandGreen"></textarea>
+            </div>
+            <button type="submit"
+              class="w-full neon-border bg-brandGreen text-black font-extrabold py-4 rounded-xl text-xs uppercase tracking-wider transition hover:scale-[1.02]">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // 3D Three.js Engine Setup
+    const canvas = document.querySelector('#webgl-bg');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x040608, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // 3D Wireframe Cyber Sphere
+    const sphereGeometry = new THREE.IcosahedronGeometry(12, 3);
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x10b981,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35
+    });
+    const cyberGlobe = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    cyberGlobe.position.set(12, 0, -5);
+    scene.add(cyberGlobe);
+
+    // Core Glowing Nodes inside Sphere
+    const nodeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+    const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff9d });
+    const nodesGroup = new THREE.Group();
+
+    for (let i = 0; i < 40; i++) {
+      const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      const r = 11.5;
+      node.position.x = r * Math.sin(phi) * Math.cos(theta);
+      node.position.y = r * Math.sin(phi) * Math.sin(theta);
+      node.position.z = r * Math.cos(phi);
+      nodesGroup.add(node);
+    }
+    cyberGlobe.add(nodesGroup);
+
+    // 3D Matrix Background Particles
+    const particlesCount = 1800;
+    const posArray = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 120;
+    }
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.12,
+      color: 0x10b981,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // Mouse Parallax Effect
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // Professional 3D Navigation Transition Handler
+    const sectionPositions = [
+      { camZ: 30, globeX: 12, globeY: 0, rotY: 0 },         // Home
+      { camZ: 25, globeX: -14, globeY: 2, rotY: Math.PI },  // About
+      { camZ: 28, globeX: 10, globeY: -4, rotY: Math.PI / 2 },// Skills
+      { camZ: 22, globeX: -12, globeY: -2, rotY: Math.PI * 1.5 },// Projects
+      { camZ: 26, globeX: 14, globeY: 3, rotY: Math.PI * 0.8 }, // Services
+      { camZ: 20, globeX: 0, globeY: 0, rotY: Math.PI * 2 }   // Contact
+    ];
+
+    function trigger3DTransition(index) {
+      const target = sectionPositions[index] || sectionPositions[0];
+
+      // GSAP Camera & Object Warp Animation
+      gsap.to(camera.position, {
+        z: target.camZ,
+        duration: 1.8,
+        ease: 'power3.inOut'
+      });
+
+      gsap.to(cyberGlobe.position, {
+        x: target.globeX,
+        y: target.globeY,
+        duration: 2.0,
+        ease: 'power3.inOut'
+      });
+
+      gsap.to(cyberGlobe.rotation, {
+        y: target.rotY,
+        x: target.rotY * 0.5,
+        duration: 2.2,
+        ease: 'power2.inOut'
+      });
+
+      gsap.to(particlesMaterial, {
+        size: 0.28,
+        duration: 0.6,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.inOut'
+      });
+    }
+
+    // Animation Loop
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      cyberGlobe.rotation.y += 0.003;
+      cyberGlobe.rotation.x += 0.001;
+
+      particlesMesh.rotation.y = elapsedTime * 0.02;
+      particlesMesh.rotation.x = -elapsedTime * 0.01;
+
+      // Smooth Mouse Follow
+      camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.05;
+      camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.05;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Project Filter Function
+    function filterProjects(category) {
+      const cards = document.querySelectorAll('.project-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active', 'bg-brandGreen', 'text-black'));
+      event.target.classList.add('active', 'bg-brandGreen', 'text-black');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+
+</html>
